@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     //ImageView ImageViewbtnSpeak =(ImageView) findViewById(R.id.btnSpeak);
     Button button_ketnoi;
     boolean check_connect = false;
+    String turn_left = "qua trái";
+    String turn_right = "qua phải";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     public void getSpeechInput(View view) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, java.util.Locale.getDefault());
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
@@ -132,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txvResult.setText(result.get(0));
+                    String ketqua = result.get(0);
+                    if(turn_left.equals(ketqua)){
+                        Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
+                    }
+                    Toast.makeText(this, ketqua, Toast.LENGTH_SHORT).show();
                     mSocket.emit("command", result.get(0));
 
                 }
